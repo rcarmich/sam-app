@@ -19,4 +19,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["MyIndexFunction"]
 
+[function_build_definitions.fce62898-a020-43f8-bf9f-f1a7b7046314]
+codeuri = "/Users/rcarmich/class/project2/sam-app/todo"
+runtime = "python3.9"
+architecture = "x86_64"
+handler = "app.put_todo"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["PutTodoFunction", "PostTodoFunction"]
+
 [layer_build_definitions]
