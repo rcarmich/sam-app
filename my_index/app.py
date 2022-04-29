@@ -35,7 +35,7 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
-        "body": "<html>This is index.html<br><a href='/Prod/hello'>Go To Hello</a></html>",
+        "body": "<html>This is index.html<br><a href='/Prod/todo'>Get Todos</a></html>",
         "headers": {
             "Content-Type": "text/html"
         }

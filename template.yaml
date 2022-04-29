@@ -23,20 +23,23 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
-  HelloWorldFunction:
+  GetTodoFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: todo/
+      Handler: app.get_todo
       Runtime: python3.9
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        ToDos:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
+            Path: /todo
             Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
 
   PutTodoFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -47,11 +50,14 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        ToDos:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /todo
             Method: put
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DynamoDBTable
 
   PostTodoFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -62,7 +68,7 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        ToDos:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /todo
@@ -71,7 +77,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref DynamoDBTable
 
-  MyIndexFunction:
+  ToDosIndexFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: my_index/
@@ -80,7 +86,7 @@ Resources:
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        ToDos:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /
@@ -89,12 +95,12 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  ToDosApi:
+    Description: "API Gateway endpoint URL for Prod stage for ToDos Index function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  ToDosIndexFunction:
+    Description: "ToDos Index Lambda Function ARN"
+    Value: !GetAtt ToDosIndexFunction.Arn
+  ToDosIndexFunctionIamRole:
+    Description: "Implicit IAM Role created for ToDos Index function"
+    Value: !GetAtt ToDosIndexFunctionRole.Arn
