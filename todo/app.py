@@ -39,11 +39,15 @@ def get_todo(event, context):
 def post_todo(event, context):
     table = dynamodb.Table('Todos')
 
+    now = datetime.now()
+
+    now_string = now.strftime("%Y/%m/%d %H:%M:%S")
+
     response = table.put_item(
         Item={
-            'title': 'Walk the dog',
-            'description': 'Take the dog for a walk, she needs the exercise',
-            'create_time': 'April 10, 2022 02:00 PM',
+            'title': event['title'],
+            'description': event['description'],
+            'create_time': now_string,
             'completed': 0
         })
 
@@ -56,15 +60,14 @@ def post_todo(event, context):
 def put_todo(event, context):
     table = dynamodb.Table('Todos')
 
-    response = table.put_item(
-        Item={
-            'title': 'Walk the dog',
-            'description': 'Take the dog for a walk, she needs the exercise',
-            'create_time': 'April 10, 2022 02:00 PM',
-            'completed': 0
-        })
+    response = table.update_item(
+        Key={'title': event['title']},
+        AttributeUpdates={
+            'completed': 1
+        }
+    )
 
-    pprint(response, sort_dicts=False)
+    print(response)
 
     return {
         "statusCode": 200

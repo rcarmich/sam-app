@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/darkly/bootstrap.min.css">
+     	<script type="text/javascript" src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
+     	<script type="text/javascript" src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+
+	<body>
+		<h1>Todo List</h1>
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Completed</th>
+					<th scope="col">Title</th>
+					<th scope="col">Description</th>
+					<th scope="col">Date Added</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input class="form-check-input" type="checkbox" checked=""></td>
+					<td>My title</td>
+					<th>My description</th>
+					<th>2022 April 30</th>
+				</tr>
+			</tbody>
+		</table>
+		
+	</body>
+
+	<script type="text/javascript">
+		$.get('/Prod/todo', function(data) {
+			console.log(data);
+		});
+	</script>
+</html>

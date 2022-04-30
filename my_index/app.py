@@ -24,18 +24,14 @@ def lambda_handler(event, context):
 
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
+    html_data = ""
 
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
+    with open('my.html') as f:
+        html_data = ''.join(f.readlines())
 
     return {
         "statusCode": 200,
-        "body": "<html>This is index.html<br><a href='/Prod/todo'>Get Todos</a></html>",
+        "body": html_data,
         "headers": {
             "Content-Type": "text/html"
         }
