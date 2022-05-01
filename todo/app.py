@@ -4,6 +4,8 @@ import boto3
 
 from decimal import Decimal
 
+from datetime import datetime
+
 dynamodb = boto3.resource('dynamodb')
 
 def handle_decimal_type(obj):
@@ -39,14 +41,18 @@ def get_todo(event, context):
 def post_todo(event, context):
     table = dynamodb.Table('Todos')
 
+    print(event)
+
+    json_object = json.loads(event['body'])
+
     now = datetime.now()
 
     now_string = now.strftime("%Y/%m/%d %H:%M:%S")
 
     response = table.put_item(
         Item={
-            'title': event['title'],
-            'description': event['description'],
+            'title': json_object['title'],
+            'description': json_object['description'],
             'create_time': now_string,
             'completed': 0
         })
@@ -60,8 +66,10 @@ def post_todo(event, context):
 def put_todo(event, context):
     table = dynamodb.Table('Todos')
 
+    json_object = json.loads(event['body'])
+
     response = table.update_item(
-        Key={'title': event['title']},
+        Key={'title': json_object['title']},
         AttributeUpdates={
             'completed': 1
         }
