@@ -60,7 +60,11 @@ def post_todo(event, context):
     print(response)
 
     return {
-        "statusCode": 200
+        "statusCode": 200,
+        "body": "{\"success\": \"true\"}",
+        "headers": {
+            "Content-Type": "text/json"
+        }
     }
 
 def put_todo(event, context):
@@ -70,13 +74,19 @@ def put_todo(event, context):
 
     response = table.update_item(
         Key={'title': json_object['title']},
-        AttributeUpdates={
-            'completed': 1
-        }
+        UpdateExpression="set completed = :g",
+        ExpressionAttributeValues={
+            ':g': 1
+        },
+        ReturnValues="UPDATED_NEW"
     )
 
     print(response)
 
     return {
-        "statusCode": 200
+        "statusCode": 200,
+        "body": "{\"success\": \"true\"}",
+        "headers": {
+            "Content-Type": "text/json"
+        }
     }

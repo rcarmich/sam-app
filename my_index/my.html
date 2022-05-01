@@ -33,18 +33,22 @@
 		$.get('/Prod/todo', function(data) {
 			console.log(data);
 
+			data = data.sort(function(a, b) {
+				return a.create_time.localeCompare(b.create_time);
+			});
+
 			data.forEach(function(item) {
 				var newRow = '<tr><td><input class="form-check-input" type="checkbox"'
 
-				if (item.checked == 1) {
+				if (item.completed == 1) {
 					newRow += ' checked=""'
 				}
 
-				newRow += ' onclick="todoChecked(';
-				newRow += item.title + ')"></td>';
+				newRow += ' onclick="todoChecked(\'';
+				newRow += item.title + '\')"></td>';
 				newRow += '<td>' + item.title + '</td>';
 				newRow += '<td>' + item.description + '</td>';
-				newRow += '<td>time goes here</td></tr>';
+				newRow += '<td>' + item.create_time + '</td></tr>';
 
 				console.log(newRow);
 
@@ -59,6 +63,7 @@
 				url: '/Prod/todo',
 				method: 'PUT',
 				contentType: "application/json",
+				dataType: 'json',
 				data: JSON.stringify({
 					title: title
 				}),
@@ -79,12 +84,15 @@
 				url: '/Prod/todo',
 				method: 'POST',
 				contentType: "application/json",
+				dataType: 'json',
 				data: JSON.stringify({
 					title: title,
 					description: desc
-				})
-			}).done(function(result) {
-				location.reload();
+				}),
+				success: function(data) {console.log('success'); location.reload();},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
 			});
 		}
 
